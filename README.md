@@ -16,9 +16,9 @@ mqtt:
   keepalive: 30                # Optional: keepalive in seconds (default: 10)
   retain: true                 # Optional: retain (default: true)
   qos: 2                       # Optional: QoS (default: 0)
-  ca: /cert/ca.pem             # Optional: CA for TLS connection
-  cert: /cert/cert.pem         # Optional: certificate for TLS connection
-  key: /cert/key.pem           # Optional: private key for TLS connection
+  ca: /cert/ca.pem             # Optional: CA for TLS connection (default: none)
+  cert: /cert/cert.pem         # Optional: certificate for TLS connection (default: none)
+  key: /cert/key.pem           # Optional: private key for TLS connection (default: none)
 
 homeassistant:
   discovery: true              # Optional: enable Home Assistant discovery (default: false)
