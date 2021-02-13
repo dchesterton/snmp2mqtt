@@ -1,7 +1,9 @@
-import { IClientOptions, connectAsync } from "async-mqtt";
+import { IClientOptions, connectAsync, AsyncMqttClient } from "async-mqtt";
 import { MQTTConfig, SensorConfig, TargetConfig } from "./types";
 import { readFileSync } from "fs";
 import { slugify } from "./util";
+import { Logger, LogLevel } from "./log";
+import { EventEmitter } from "events";
 
 const OFFLINE = "offline";
 const ONLINE = "online";
@@ -11,11 +13,7 @@ const topics = {
 };
 
 const connect = (config: MQTTConfig) => {
-  const port = config.port
-      ? config.port
-      : config.ca
-      ? 8883
-      : 1883;
+  const port = config.port ? config.port : config.ca ? 8883 : 1883;
 
   const options: IClientOptions = {
     hostname: config.host,
@@ -60,21 +58,32 @@ const connect = (config: MQTTConfig) => {
     options.protocol = "mqtts";
   }
 
+  options.reconnectPeriod = 5000;
+
   return connectAsync(options);
 };
 
-export const createClient = async (config: MQTTConfig) => {
-  let client = await connect(config);
+export const createClient = async (config: MQTTConfig, log: Logger) => {
+  const emitter = new EventEmitter();
+
+  let client: AsyncMqttClient = await connect(config);
+
   client.on("close", async () => {
-    // client = undefined;
-    // client = await connect(config);
+    emitter.emit("close");
+  });
+  client.on("connect", async () => {
+    emitter.emit("connect");
   });
 
   const publish = (
     topic: string,
     message: string | Record<string, unknown> | number | bigint
   ) => {
-    if (!client) {
+    if (!client.connected) {
+      log(
+        LogLevel.WARNING,
+        `Skipping publish to ${topic}, MQTT connection closed`
+      );
       return Promise.resolve(null);
     }
     const payload =
@@ -97,6 +106,9 @@ export const createClient = async (config: MQTTConfig) => {
     statusTopic: topics.status,
     ONLINE,
     OFFLINE,
+    on: (event: "close" | "connect", cb: () => void) => emitter.on(event, cb),
+    off: (event: "close" | "connect", cb: () => void) => emitter.off(event, cb),
+    end: () => client.end(),
   };
 };
 

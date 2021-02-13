@@ -1,17 +1,18 @@
 import * as snmp from "net-snmp";
 import * as safeEval from "safe-eval";
 
-import { SensorConfig, TargetConfig, VersionConfig } from "./types";
+import { TargetConfig, VersionConfig } from "./types";
 import { EventEmitter } from "events";
 import { Logger, LogLevel } from "./log";
 import { toBigIntBE } from "bigint-buffer";
+import { throws } from "assert";
 
 const versionToNetSnmp = (version?: VersionConfig) => {
   switch (version) {
-    case '2c':
+    case "2c":
       return snmp.Version2c as number;
     case 3:
-    case '3':
+    case "3":
       return snmp.Version1 as number;
     default:
       return snmp.Version3 as number;
@@ -20,14 +21,9 @@ const versionToNetSnmp = (version?: VersionConfig) => {
 
 export declare interface Target {
   on(
-    event: "error",
-    listener: (error: Error, sensor: SensorConfig, target: TargetConfig) => void
-  ): this;
-  on(
     event: "response",
     listener: (
-      value: string | number | bigint,
-      sensor: SensorConfig,
+      values: Array<string | number | bigint>,
       target: TargetConfig
     ) => void
   ): this;
@@ -36,13 +32,44 @@ export declare interface Target {
 export class Target extends EventEmitter {
   private session: any;
   private interval?: NodeJS.Timer;
+  private ending: boolean = false;
 
   public constructor(private options: TargetConfig, private log: Logger) {
     super();
   }
 
+  public pause() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+  }
+
+  public resume() {
+    this.interval = setInterval(() => {
+      this.fetch();
+    }, this.getScanInterval());
+
+    this.fetch();
+  }
+
+  public end() {
+    this.ending = true;
+
+    return new Promise<void>((res) => {
+      this.session.on("close", () => {
+        res();
+      });
+      this.session.close();
+    });
+  }
+
+  private getScanInterval() {
+    return (this.options.scan_interval ?? 10) * 1000;
+  }
+
   public connect() {
-    const scanIntervalMs = (this.options.scan_interval ?? 10) * 1000;
+    const scanIntervalMs = this.getScanInterval();
+
     const options: any = {
       port: this.options.port ?? 161,
       retries: 3,
@@ -85,23 +112,19 @@ export class Target extends EventEmitter {
     }
 
     this.session.on("close", () => {
-      this.log(LogLevel.WARNING, `Target ${this.options.host} disconnected`);
-
-      if (this.interval) {
-        clearInterval(this.interval);
+      if (this.ending) {
+        return;
       }
+
+      this.log(LogLevel.WARNING, `Target ${this.options.host} disconnected`);
+      this.pause();
 
       setTimeout(() => {
         this.connect();
       }, 2000);
     });
-    //this.session.on("")
 
-    this.interval = setInterval(() => {
-      this.fetch();
-    }, scanIntervalMs);
-
-    this.fetch();
+    this.resume();
   }
 
   public close() {
@@ -122,21 +145,22 @@ export class Target extends EventEmitter {
       oids,
       (error: Error, varbinds: Array<{ value: string | number }>) => {
         if (error) {
-          for (const sensor of this.options.sensors) {
-            this.emit("error", error, sensor, this.options);
+          const errors = [];
+
+          for (let i = 0; i < oids.length; i++) {
+            errors.push(error);
           }
+
+          this.emit("response", errors, this.options);
         } else {
+          const values = [];
+
           for (const i in this.options.sensors) {
             const sensor = this.options.sensors[i];
             const result = varbinds[i];
 
             if (snmp.isVarbindError(result)) {
-              this.emit(
-                "error",
-                snmp.varbindError(result),
-                sensor,
-                this.options
-              );
+              values.push(snmp.varbindError(result));
             } else {
               let { value, type } = result as {
                 value: string | number | Buffer | bigint;
@@ -156,9 +180,11 @@ export class Target extends EventEmitter {
                 value = safeEval(sensor.transform, { value });
               }
 
-              this.emit("response", value, sensor, this.options);
+              values.push(value);
             }
           }
+
+          this.emit("response", values, this.options);
         }
       }
     );

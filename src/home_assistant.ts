@@ -19,15 +19,14 @@ export const createHomeAssistantTopics = async (
     if (target.device_manufacturer) {
       device.manufacturer = target.device_manufacturer;
     }
-
     if (target.device_model) {
       device.model = target.device_model;
     }
 
     for (const sensor of target.sensors) {
-      const topic = `${prefix}/${
-        sensor.binary_sensor ? "binary_sensor" : "sensor"
-      }/snmp2mqtt/${slugify(sensor.name)}/config`;
+      const sensorType = sensor.binary_sensor ? "binary_sensor" : "sensor";
+      const sensorName = slugify(sensor.name);
+      const topic = `${prefix}/${sensorType}/snmp2mqtt/${sensorName}/config`;
 
       const discovery: any = {
         availability: [
@@ -48,11 +47,9 @@ export const createHomeAssistantTopics = async (
       if (sensor.unit_of_measurement) {
         discovery.unit_of_measurement = sensor.unit_of_measurement;
       }
-
       if (sensor.device_class) {
         discovery.device_class = sensor.device_class;
       }
-
       if (sensor.icon) {
         discovery.icon = sensor.icon;
       }
