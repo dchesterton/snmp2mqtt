@@ -5,6 +5,7 @@ Expose SNMP sensors to MQTT.
 ## config.yml
 
 ```
+# Optional: one of "debug", "info", "warning" or "error" (default: "info")
 log: debug
 
 mqtt:
