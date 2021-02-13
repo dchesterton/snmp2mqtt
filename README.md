@@ -8,14 +8,21 @@ Expose SNMP sensors to MQTT.
 log: debug
 
 mqtt:
-  host: 192.168.0.1
-  username: admin
-  password: password
-  client_id: snmp2mqtt
-  qos: 2
+  host: localhost # Optional: MQTT server URL (default: "localhost")
+  port: 1883 # Optional: defaults to 1883
+  username: my_user # Optional: MQTT server authentication user (default: nothing)
+  password: my_password # Optional: MQTT server authentication password (default: nothing)
+  client_id: snmp2mqtt # Optional: MQTT client ID (default: random)
+  keepalive: 30 # Optional: MQTT keepalive in seconds (default: 10)
+  retain: true # Optional: MQTT retain (default: true)
+  qos: 2 # Optional: MQTT QoS (default: 0)
+  ca: /cert/ca.pem # Optional: CA for secure TLS connection
+  cert: /cert/cert.pem # Optional: certificate for secure TLS connection
+  key: /cert/key.pem # Optional: private ky for secure TLS connection
 
 homeassistant:
-  discovery: true
+  discovery: true # Optional: enable Home Assistant discovery (default: false)
+  prefix: "home-assistant" # Optional: Home Assistant MQTT topic prefix (default: homeassistant)
 
 targets:
   - host: 192.168.0.2
