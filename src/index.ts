@@ -20,7 +20,7 @@ const log = createLogger(config.log);
   }
 
   const publishSensor = async (
-    value: string | number,
+    value: string | number | bigint,
     sensor: SensorConfig,
     target: TargetConfig
   ) => {

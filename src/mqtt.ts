@@ -1,4 +1,4 @@
-import { IClientOptions, connectAsync, IPublishPacket } from "async-mqtt";
+import { IClientOptions, connectAsync } from "async-mqtt";
 import { MQTTConfig, SensorConfig, TargetConfig } from "./types";
 import { readFileSync } from "fs";
 import { slugify } from "./util";
@@ -57,7 +57,7 @@ const connect = (config: MQTTConfig) => {
   return connectAsync(options);
 };
 
-export const createClient = async (config: MQTTConfig): Promise<Client> => {
+export const createClient = async (config: MQTTConfig) => {
   let client = await connect(config);
   client.on("close", async () => {
     // client = undefined;
@@ -66,7 +66,7 @@ export const createClient = async (config: MQTTConfig): Promise<Client> => {
 
   const publish = (
     topic: string,
-    message: string | Record<string, unknown> | number
+    message: string | Record<string, unknown> | number | bigint
   ) => {
     if (!client) {
       return Promise.resolve(null);
@@ -94,14 +94,5 @@ export const createClient = async (config: MQTTConfig): Promise<Client> => {
   };
 };
 
-export interface Client {
-  publish: (
-    topic: string,
-    payload: string | number
-  ) => Promise<IPublishPacket | null>;
-  sensorStatusTopic: (sensor: SensorConfig, target: TargetConfig) => string;
-  sensorValueTopic: (sensor: SensorConfig, target: TargetConfig) => string;
-  statusTopic: string;
-  ONLINE: string;
-  OFFLINE: string;
-}
+type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
+export type Client = ThenArg<ReturnType<typeof createClient>>;

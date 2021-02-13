@@ -4,6 +4,7 @@ import * as safeEval from "safe-eval";
 import { SensorConfig, TargetConfig, Version } from "./types";
 import { EventEmitter } from "events";
 import { Logger, LogLevel } from "./log";
+import { toBigIntBE } from "bigint-buffer";
 
 const versionToNetSnmp = (version: Version) => {
   switch (version) {
@@ -24,7 +25,7 @@ export declare interface Target {
   on(
     event: "response",
     listener: (
-      value: string | number,
+      value: string | number | bigint,
       sensor: SensorConfig,
       target: TargetConfig
     ) => void
@@ -138,11 +139,20 @@ export class Target extends EventEmitter {
                 this.options
               );
             } else {
-              let { value } = result as { value: string | number };
+              let { value, type } = result as {
+                value: string | number | Buffer | bigint;
+                type: any;
+              };
 
-              if (Buffer.isBuffer(value)) {
-                value = value.toString();
+              switch (type) {
+                case snmp.ObjectType.Counter64:
+                  value = toBigIntBE(value as Buffer);
+                  break;
+                case snmp.ObjectType.OctetString:
+                  value = value.toString();
+                  break;
               }
+
               if (sensor.transform) {
                 value = safeEval(sensor.transform, { value });
               }
