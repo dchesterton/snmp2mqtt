@@ -101,6 +101,23 @@ export const schema = {
               scan_interval: {
                 type: "number",
               },
+              username: {
+                type: "string",
+              },
+              auth_key: {
+                type: "string",
+              },
+              auth_protocol: {
+                type: "string",
+                enum: ["sha", "md5"],
+              },
+              priv_key: {
+                type: "string",
+              },
+              priv_protocol: {
+                type: "string",
+                enum: ["des", "aes", "aes256b", "aes256r"],
+              },
               sensors: {
                 type: "array",
                 items: {

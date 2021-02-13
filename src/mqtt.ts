@@ -95,7 +95,10 @@ export const createClient = async (config: MQTTConfig): Promise<Client> => {
 };
 
 export interface Client {
-  publish: (topic: string, payload: string | number) => Promise<IPublishPacket | null>;
+  publish: (
+    topic: string,
+    payload: string | number
+  ) => Promise<IPublishPacket | null>;
   sensorStatusTopic: (sensor: SensorConfig, target: TargetConfig) => string;
   sensorValueTopic: (sensor: SensorConfig, target: TargetConfig) => string;
   statusTopic: string;

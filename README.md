@@ -1,6 +1,6 @@
 # snmp2mqtt
 
-Expose snmp sensors to MQTT.
+Expose SNMP sensors to MQTT.
 
 ## config.yml
 
@@ -39,7 +39,13 @@ targets:
 
   - host: 192.168.0.3
     name: Raspberry Pi 2
-    version: 1
+    version: 3
+    username: admin
+    auth_key: password
+    auth_protocol: sha|md5
+    priv_key: password
+    priv_protocol: des|aes|aes256b|aes256r
+    version: "3"
     sensors:
       - oid: 1.3.6.1.2.1.25.1.1.0
         name: Raspberry Pi 2 Uptime

@@ -6,12 +6,6 @@ export enum Version {
   Version3 = "3",
 }
 
-export enum SecurityLevel {
-  NoAuthNoPriv = "noAuthNoPriv",
-  AuthNoPriv = "authNoPriv",
-  AuthPriv = "authPriv",
-}
-
 export interface MQTTConfig {
   host: string;
   port: number;
@@ -36,11 +30,10 @@ export interface TargetConfig {
   sensors: SensorConfig[];
   port: number;
   scan_interval: number;
-  user: string;
-  level: SecurityLevel;
-  auth_protocol: "md5" | "sha";
+  username: string;
+  auth_protocol?: "md5" | "sha";
   auth_key?: string;
-  priv_protocol?: "des" | "aes";
+  priv_protocol?: "des" | "aes" | "aes256b" | "aes256r";
   priv_key?: string;
 }
 

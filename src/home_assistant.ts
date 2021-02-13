@@ -17,11 +17,11 @@ export const createHomeAssistantTopics = async (
     };
 
     if (target.device_manufacturer) {
-        device.manufacturer = target.device_manufacturer;
+      device.manufacturer = target.device_manufacturer;
     }
 
     if (target.device_model) {
-        device.model = target.device_model;
+      device.model = target.device_model;
     }
 
     for (const sensor of target.sensors) {

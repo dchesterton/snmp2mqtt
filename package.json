@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "start": "ts-node src/index.ts",
+    "start": "ts-node --files src/index.ts",
     "prettier:write": "prettier src --write"
   }
 }

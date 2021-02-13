@@ -1,7 +1,7 @@
 import * as snmp from "net-snmp";
 import * as safeEval from "safe-eval";
 
-import { SecurityLevel, SensorConfig, TargetConfig, Version } from "./types";
+import { SensorConfig, TargetConfig, Version } from "./types";
 import { EventEmitter } from "events";
 import { Logger, LogLevel } from "./log";
 
@@ -13,17 +13,6 @@ const versionToNetSnmp = (version: Version) => {
       return snmp.Version2c as number;
     case Version.Version1:
       return snmp.Version1 as number;
-  }
-};
-
-const securityLevelToNetSnmp = (level: SecurityLevel) => {
-  switch (level) {
-    case SecurityLevel.NoAuthNoPriv:
-      return snmp.SecurityLevel.noAuthNoPriv;
-    case SecurityLevel.AuthNoPriv:
-      return snmp.SecurityLevel.authNoPriv;
-    case SecurityLevel.AuthPriv:
-      return snmp.SecurityLevel.authPriv;
   }
 };
 
@@ -63,16 +52,31 @@ export class Target extends EventEmitter {
     };
 
     if (version === Version.Version3) {
-      const user = {
-        name: this.options.user,
-        level: securityLevelToNetSnmp(
-          this.options.level ?? SecurityLevel.NoAuthNoPriv
-        ),
-        // authProtocol: snmp.AuthProtocols.sha,
-        // authKey: "madeahash",
-        // privProtocol: snmp.PrivProtocols.des,
-        // privKey: "privycouncil"
+      const user: any = {
+        name: this.options.username,
       };
+
+      if (this.options.auth_key && this.options.priv_key) {
+        user.level = snmp.SecurityLevel.authPriv;
+      } else if (this.options.auth_key && !this.options.priv_key) {
+        user.level = snmp.SecurityLevel.authNoPriv;
+      } else {
+        user.level = snmp.SecurityLevel.noAuthNoPriv;
+      }
+
+      if (this.options.auth_protocol) {
+        user.authProtocol = snmp.AuthProtocols[this.options.auth_protocol];
+      }
+      if (this.options.auth_key) {
+        user.authKey = this.options.auth_key;
+      }
+
+      if (this.options.priv_protocol) {
+        user.privProtocol = snmp.PrivProtocols[this.options.priv_protocol];
+      }
+      if (this.options.priv_key) {
+        user.privKey = this.options.priv_key;
+      }
 
       this.session = snmp.createV3Session(this.options.host, user, options);
     } else {
@@ -114,32 +118,40 @@ export class Target extends EventEmitter {
       `Fetching ${oids.length} sensors from ${this.options.host}...`
     );
 
-    this.session.get(oids, (error: Error, varbinds: Array<{ value: string | number }>) => {
-      if (error) {
-        for (const sensor of this.options.sensors) {
-          this.emit("error", error, sensor, this.options);
-        }
-      } else {
-        for (const i in this.options.sensors) {
-          const sensor = this.options.sensors[i];
-          const result = varbinds[i];
+    this.session.get(
+      oids,
+      (error: Error, varbinds: Array<{ value: string | number }>) => {
+        if (error) {
+          for (const sensor of this.options.sensors) {
+            this.emit("error", error, sensor, this.options);
+          }
+        } else {
+          for (const i in this.options.sensors) {
+            const sensor = this.options.sensors[i];
+            const result = varbinds[i];
 
-          if (snmp.isVarbindError(result)) {
-            this.emit("error", snmp.varbindError(result), sensor, this.options);
-          } else {
-            let { value } = result as { value: string | number };
+            if (snmp.isVarbindError(result)) {
+              this.emit(
+                "error",
+                snmp.varbindError(result),
+                sensor,
+                this.options
+              );
+            } else {
+              let { value } = result as { value: string | number };
 
-            if (Buffer.isBuffer(value)) {
-              value = value.toString();
+              if (Buffer.isBuffer(value)) {
+                value = value.toString();
+              }
+              if (sensor.transform) {
+                value = safeEval(sensor.transform, { value });
+              }
+
+              this.emit("response", value, sensor, this.options);
             }
-            if (sensor.transform) {
-              value = safeEval(sensor.transform, { value });
-            }
-
-            this.emit("response", value, sensor, this.options);
           }
         }
       }
-    });
+    );
   }
 }
