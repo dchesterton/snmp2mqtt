@@ -11,10 +11,16 @@ const topics = {
 };
 
 const connect = (config: MQTTConfig) => {
+  const port = config.port
+      ? config.port
+      : config.ca
+      ? 8883
+      : 1883;
+
   const options: IClientOptions = {
     hostname: config.host,
     protocol: "mqtt",
-    port: config.port,
+    port,
     will: {
       topic: topics.status,
       payload: OFFLINE,

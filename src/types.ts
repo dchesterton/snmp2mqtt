@@ -1,11 +1,5 @@
 import { LogLevelStrings } from "./log";
 
-export enum Version {
-  Version1 = "1",
-  Version2c = "2c",
-  Version3 = "3",
-}
-
 export interface MQTTConfig {
   host: string;
   port: number;
@@ -22,20 +16,22 @@ export interface MQTTConfig {
 
 export interface TargetConfig {
   host: string;
+  sensors: SensorConfig[];
   name?: string;
   device_manufacturer?: string;
   device_model?: string;
-  community: string;
-  version: Version;
-  sensors: SensorConfig[];
-  port: number;
-  scan_interval: number;
-  username: string;
+  community?: string;
+  version?: VersionConfig;
+  port?: number;
+  scan_interval?: number;
+  username?: string;
   auth_protocol?: "md5" | "sha";
   auth_key?: string;
   priv_protocol?: "des" | "aes" | "aes256b" | "aes256r";
   priv_key?: string;
 }
+
+export type VersionConfig = "1" | 1 | "2c" | 3 | "3";
 
 export interface SensorConfig {
   oid: string;

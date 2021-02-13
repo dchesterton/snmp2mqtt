@@ -1,19 +1,20 @@
 import * as snmp from "net-snmp";
 import * as safeEval from "safe-eval";
 
-import { SensorConfig, TargetConfig, Version } from "./types";
+import { SensorConfig, TargetConfig, VersionConfig } from "./types";
 import { EventEmitter } from "events";
 import { Logger, LogLevel } from "./log";
 import { toBigIntBE } from "bigint-buffer";
 
-const versionToNetSnmp = (version: Version) => {
+const versionToNetSnmp = (version?: VersionConfig) => {
   switch (version) {
-    case Version.Version3:
-      return snmp.Version3 as number;
-    case Version.Version2c:
+    case '2c':
       return snmp.Version2c as number;
-    case Version.Version1:
+    case 3:
+    case '3':
       return snmp.Version1 as number;
+    default:
+      return snmp.Version3 as number;
   }
 };
 
@@ -42,17 +43,15 @@ export class Target extends EventEmitter {
 
   public connect() {
     const scanIntervalMs = (this.options.scan_interval ?? 10) * 1000;
-    const version = this.options.version ?? Version.Version1;
-
     const options: any = {
       port: this.options.port ?? 161,
       retries: 3,
       timeout: scanIntervalMs > 5000 ? 5000 : scanIntervalMs / 2,
       backoff: 1.0,
-      version: versionToNetSnmp(version),
+      version: versionToNetSnmp(this.options.version),
     };
 
-    if (version === Version.Version3) {
+    if (options.version === snmp.Version3) {
       const user: any = {
         name: this.options.username,
       };

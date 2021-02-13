@@ -95,8 +95,7 @@ export const schema = {
                 type: "string",
               },
               version: {
-                type: "string",
-                enum: ["1", "2c", "3"],
+                type: ["string", "number"],
               },
               scan_interval: {
                 type: "number",
