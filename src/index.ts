@@ -71,7 +71,7 @@ const log = createLogger(config.log);
   const pauseClients = () => {
     log(LogLevel.WARNING, "MQTT client disconnected");
     clients.forEach((client) => client.pause());
-  }
+  };
 
   mqtt.on("close", pauseClients);
 
@@ -100,5 +100,5 @@ const log = createLogger(config.log);
   process.on("unhandledRejection", async (error) => {
     log(LogLevel.ERROR, `Unhandled rejection - ${error}`);
     await exit(1);
-});
+  });
 })();
