@@ -17,7 +17,6 @@ export const schema = {
         },
         port: {
           type: "number",
-          default: 1883,
         },
         keepalive: {
           type: "number",

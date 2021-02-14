@@ -2,7 +2,7 @@ import { LogLevelStrings } from "./log";
 
 export interface MQTTConfig {
   host: string;
-  port: number;
+  port?: number;
   username?: string;
   password?: string;
   retain: boolean;
