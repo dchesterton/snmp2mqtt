@@ -5,7 +5,6 @@ import { TargetConfig, VersionConfig } from "./types";
 import { EventEmitter } from "events";
 import { Logger, LogLevel } from "./log";
 import { toBigIntBE } from "bigint-buffer";
-import { throws } from "assert";
 
 const versionToNetSnmp = (version?: VersionConfig) => {
   switch (version) {
@@ -13,9 +12,9 @@ const versionToNetSnmp = (version?: VersionConfig) => {
       return snmp.Version2c as number;
     case 3:
     case "3":
-      return snmp.Version1 as number;
-    default:
       return snmp.Version3 as number;
+    default:
+      return snmp.Version1 as number;
   }
 };
 

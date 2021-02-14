@@ -40,20 +40,19 @@ const log = createLogger(config.log);
         promises.push(
           mqtt.publish(mqtt.sensorStatusTopic(sensor, target), mqtt.OFFLINE)
         );
-        return;
+      } else {
+        log(
+          LogLevel.INFO,
+          `[${target.host}] ${sensor.name}: ${value}${
+            sensor.unit_of_measurement ? `${sensor.unit_of_measurement}` : ""
+          }`
+        );
+
+        promises.push(
+          mqtt.publish(mqtt.sensorValueTopic(sensor, target), value),
+          mqtt.publish(mqtt.sensorStatusTopic(sensor, target), mqtt.ONLINE)
+        );
       }
-
-      log(
-        LogLevel.INFO,
-        `[${target.host}] ${sensor.name}: ${value}${
-          sensor.unit_of_measurement ? `${sensor.unit_of_measurement}` : ""
-        }`
-      );
-
-      promises.push(
-        mqtt.publish(mqtt.sensorValueTopic(sensor, target), value),
-        mqtt.publish(mqtt.sensorStatusTopic(sensor, target), mqtt.ONLINE)
-      );
     }
 
     await Promise.all(promises);
