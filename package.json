@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "ajv": "^7.1.0",
+    "ajv": "^7.1.1",
     "async-mqtt": "^2.6.1",
     "better-ajv-errors": "^0.7.0",
     "bigint-buffer": "^1.1.5",
