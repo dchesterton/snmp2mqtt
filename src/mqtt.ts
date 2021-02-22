@@ -109,6 +109,7 @@ export const createClient = async (config: MQTTConfig, log: Logger) => {
     on: (event: "close" | "connect", cb: () => void) => emitter.on(event, cb),
     off: (event: "close" | "connect", cb: () => void) => emitter.off(event, cb),
     end: () => client.end(),
+    qos: config.qos,
   };
 };
 

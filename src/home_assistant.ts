@@ -42,6 +42,7 @@ export const createHomeAssistantTopics = async (
         name: sensor.name,
         unique_id: `snmp2mqtt.${md5(`${target.host}-${sensor.oid}`)}`,
         state_topic: mqtt.sensorValueTopic(sensor, target),
+        qos: mqtt.qos,
       };
 
       if (sensor.unit_of_measurement) {
