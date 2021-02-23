@@ -13,6 +13,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Automated version bump
+        uses: phips28/gh-action-bump-version@master
+        id: bump
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract version
+        run: |
+          RE='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
+          MAJOR=`echo $version | sed -e "s#$RE#\1#"`
+          MINOR=`echo $version | sed -e "s#$RE#\2#"`
+          PATCH=`echo $version | sed -e "s#$RE#\3#"`
+          echo "::set-output name=version::$MAJOR.$MINOR.$PATCH"
+          echo "::set-output name=major::$MAJOR"
+          echo "::set-output name=minor::$MAJOR.$MINOR"
+        id: version
+        env:
+          version: ${{ steps.bump.outputs.newTag }}
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -22,4 +39,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: dchesterton/snmp2mqtt:latest
+          tags: |
+            dchesterton/snmp2mqtt:latest
+            dchesterton/snmp2mqtt:${{ steps.version.outputs.version }}
+          labels: "version=${{ steps.version.outputs.version }}"
