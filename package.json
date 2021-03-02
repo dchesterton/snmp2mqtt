@@ -14,7 +14,7 @@
     "bigint-buffer": "^1.1.5",
     "js-yaml": "^4.0.0",
     "luxon": "^1.26.0",
-    "net-snmp": "^3.4.3",
+    "net-snmp": "^3.5.2",
     "safe-eval": "^0.4.1",
     "slugify": "^1.4.7"
   },
