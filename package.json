@@ -1,6 +1,6 @@
 {
   "name": "snmp2mqtt",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
