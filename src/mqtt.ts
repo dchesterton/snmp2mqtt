@@ -68,14 +68,6 @@ export const createClient = async (config: MQTTConfig, log: Logger) => {
 
     let client: AsyncMqttClient = await connect(config);
 
-    client.on("close", async () => {
-        emitter.emit("close");
-    });
-    client.on("connect", async () => {
-        await publish(topics.status, ONLINE);
-        emitter.emit("connect");
-    });
-
     const publish = (
         topic: string,
         message: string | Record<string, unknown> | number | bigint
@@ -92,11 +84,26 @@ export const createClient = async (config: MQTTConfig, log: Logger) => {
                 ? JSON.stringify(message)
                 : String(message);
 
+        log(
+            LogLevel.DEBUG,
+            `Writing ${payload} to ${topic} (QOS: ${config.qos}, Retain: ${
+                config.retain ? "true" : "false"
+            })`
+        );
+
         return client.publish(topic, payload, {
             qos: config.qos,
             retain: config.retain,
         });
     };
+
+    client.on("close", async () => {
+        emitter.emit("close");
+    });
+    client.on("connect", async () => {
+        await publish(topics.status, ONLINE);
+        emitter.emit("connect");
+    });
 
     return {
         publish,
