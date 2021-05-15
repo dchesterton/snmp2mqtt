@@ -2,15 +2,13 @@ import { IClientOptions, connectAsync, AsyncMqttClient } from "async-mqtt";
 import { MQTTConfig, SensorConfig, TargetConfig } from "./types";
 import { readFileSync } from "fs";
 import { slugify } from "./util";
-import { Logger, LogLevel } from "./log";
+import { Logger } from "./log";
 import { EventEmitter } from "events";
 
 const OFFLINE = "offline";
 const ONLINE = "online";
 
-const topics = {
-    status: "snmp2mqtt/status",
-};
+const STATUS_TOPIC = "snmp2mqtt/status";
 
 const connect = (config: MQTTConfig) => {
     const port = config.port ? config.port : config.ca ? 8883 : 1883;
@@ -20,7 +18,7 @@ const connect = (config: MQTTConfig) => {
         protocol: "mqtt",
         port,
         will: {
-            topic: topics.status,
+            topic: STATUS_TOPIC,
             payload: OFFLINE,
             retain: config.retain,
             qos: config.qos,
@@ -73,10 +71,7 @@ export const createClient = async (config: MQTTConfig, log: Logger) => {
         message: string | Record<string, unknown> | number | bigint
     ) => {
         if (!client.connected) {
-            log(
-                LogLevel.WARNING,
-                `Skipping publish to ${topic}, MQTT connection closed`
-            );
+            log.warning(`Skipping publish to ${topic}, MQTT connection closed`);
             return Promise.resolve(null);
         }
         const payload =
@@ -84,9 +79,8 @@ export const createClient = async (config: MQTTConfig, log: Logger) => {
                 ? JSON.stringify(message)
                 : String(message);
 
-        log(
-            LogLevel.DEBUG,
-            `Writing ${payload} to ${topic} (QOS: ${config.qos}, Retain: ${
+        log.debug(
+            `Writing to ${topic} (QOS: ${config.qos}, retain: ${
                 config.retain ? "true" : "false"
             })`
         );
@@ -97,13 +91,18 @@ export const createClient = async (config: MQTTConfig, log: Logger) => {
         });
     };
 
+    const onConnect = async () => {
+        await publish(STATUS_TOPIC, ONLINE);
+        emitter.emit("connect");
+    };
+
     client.on("close", async () => {
         emitter.emit("close");
     });
-    client.on("connect", async () => {
-        await publish(topics.status, ONLINE);
-        emitter.emit("connect");
-    });
+
+    client.on("connect", onConnect);
+
+    await onConnect();
 
     return {
         publish,
@@ -111,14 +110,17 @@ export const createClient = async (config: MQTTConfig, log: Logger) => {
             `snmp2mqtt/${target.host}/${slugify(sensor.name)}/status`,
         sensorValueTopic: (sensor: SensorConfig, target: TargetConfig) =>
             `snmp2mqtt/${target.host}/${slugify(sensor.name)}/value`,
-        statusTopic: topics.status,
+        STATUS_TOPIC,
         ONLINE,
         OFFLINE,
         on: (event: "close" | "connect", cb: () => void) =>
             emitter.on(event, cb),
         off: (event: "close" | "connect", cb: () => void) =>
             emitter.off(event, cb),
-        end: () => client.end(),
+        end: async () => {
+            await client.publish(STATUS_TOPIC, OFFLINE);
+            await client.end();
+        },
         qos: config.qos,
     };
 };
