@@ -1,11 +1,13 @@
 {
   "name": "snmp2mqtt",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0 <15.0.0"
   },
-  "bin": "dist/index.js",
+  "bin": {
+    "snmp2mqtt": "dist/index.js"
+  },
   "author": "Daniel Chesterton",
   "dependencies": {
     "ajv": "^8.5.0",
