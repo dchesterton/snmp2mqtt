@@ -4,7 +4,7 @@ import { Target } from "./snmp";
 import { loadConfig } from "./config";
 import { TargetConfig } from "./types";
 import { createHomeAssistantTopics } from "./home_assistant";
-import { readFileSync } from "node:fs";
+import { readFileSync } from "fs";
 
 const config = loadConfig();
 const log = createLogger(config.log);
