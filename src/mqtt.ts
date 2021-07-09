@@ -9,6 +9,7 @@ const OFFLINE = "offline";
 const ONLINE = "online";
 
 const STATUS_TOPIC = "snmp2mqtt/status";
+const CONFIG_TOPIC = "snmp2mqtt/config";
 
 const connect = (config: MQTTConfig) => {
     const port = config.port ? config.port : config.ca ? 8883 : 1883;
@@ -61,7 +62,11 @@ const connect = (config: MQTTConfig) => {
     return connectAsync(options);
 };
 
-export const createClient = async (config: MQTTConfig, log: Logger) => {
+export const createClient = async (
+    config: MQTTConfig,
+    log: Logger,
+    version: string
+) => {
     const emitter = new EventEmitter();
 
     let client: AsyncMqttClient = await connect(config);
@@ -93,6 +98,7 @@ export const createClient = async (config: MQTTConfig, log: Logger) => {
 
     const onConnect = async () => {
         await publish(STATUS_TOPIC, ONLINE);
+        await publish(CONFIG_TOPIC, { version });
         emitter.emit("connect");
     };
 

@@ -4,12 +4,19 @@ import { Target } from "./snmp";
 import { loadConfig } from "./config";
 import { TargetConfig } from "./types";
 import { createHomeAssistantTopics } from "./home_assistant";
+import { readFileSync } from "node:fs";
 
 const config = loadConfig();
 const log = createLogger(config.log);
 
 (async () => {
-    const mqtt = await createClient(config.mqtt, log);
+    const version: string = JSON.parse(
+        readFileSync(`${__dirname}/../package.json`).toString()
+    ).version;
+
+    log.info(`Starting snmp2mqtt v${version}...`);
+
+    const mqtt = await createClient(config.mqtt, log, version);
 
     if (config.homeassistant.discovery) {
         await createHomeAssistantTopics(
