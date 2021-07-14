@@ -20,7 +20,7 @@
     "slugify": "^1.5.3"
   },
   "devDependencies": {
-    "@types/js-yaml": "^4.0.1",
+    "@types/js-yaml": "^4.0.2",
     "@types/luxon": "^1.26.5",
     "@types/node": "^14.14.27",
     "prettier": "^2.3.0",
