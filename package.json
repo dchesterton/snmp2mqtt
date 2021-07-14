@@ -17,7 +17,6 @@
     "js-yaml": "^4.1.0",
     "luxon": "^1.27.0",
     "net-snmp": "^3.5.2",
-    "safe-eval": "^0.4.1",
     "slugify": "^1.5.3"
   },
   "devDependencies": {

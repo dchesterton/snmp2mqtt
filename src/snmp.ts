@@ -1,5 +1,4 @@
 import * as snmp from "net-snmp";
-import * as safeEval from "safe-eval";
 
 import { TargetConfig, VersionConfig } from "./types";
 import { EventEmitter } from "events";
@@ -185,7 +184,7 @@ export class Target extends EventEmitter {
                             }
 
                             if (sensor.transform) {
-                                value = safeEval(sensor.transform, { value });
+                                value = eval(sensor.transform);
                             }
 
                             values.push(value);
