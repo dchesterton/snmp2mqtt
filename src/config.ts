@@ -1,5 +1,5 @@
 import Ajv from "ajv";
-import * as betterAjvErrors from "better-ajv-errors";
+import betterAjvErrors from "better-ajv-errors";
 import * as fs from "fs";
 import { JSON_SCHEMA, load } from "js-yaml";
 
