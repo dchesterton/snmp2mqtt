@@ -167,7 +167,7 @@ export class Target extends EventEmitter {
                         const result = varbinds[i];
 
                         if (snmp.isVarbindError(result)) {
-                            values.push(snmp.varbindError(result));
+                            values.push(new Error(snmp.varbindError(result)));
                         } else {
                             let { value, type } = result as {
                                 value: string | number | Buffer | bigint;
