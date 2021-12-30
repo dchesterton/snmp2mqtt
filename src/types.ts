@@ -12,6 +12,8 @@ export interface MQTTConfig {
     ca?: string;
     cert?: string;
     key?: string;
+    clean: boolean;
+    reject_unauthorized?: boolean;
 }
 
 export interface TargetConfig {

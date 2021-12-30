@@ -27,7 +27,7 @@ function validate(userConfig: unknown) {
     const validator = ajv.compile<Config>(schema);
 
     if (!validator(userConfig)) {
-        const errors = betterAjvErrors(schema, userConfig, validator.errors, {
+        const errors = betterAjvErrors(schema, userConfig, validator.errors!, {
             format: "js",
         });
 
@@ -62,6 +62,6 @@ function loadYamlConfig() {
             schema: JSON_SCHEMA,
         });
     } catch (e) {
-        throw new Error(`Error loading config file: ${e.message}`);
+        throw new Error(`Error loading config file: ${e}`);
     }
 }

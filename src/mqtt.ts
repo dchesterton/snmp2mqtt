@@ -24,7 +24,14 @@ const connect = (config: MQTTConfig) => {
             retain: config.retain,
             qos: config.qos,
         },
+        clientId: config.client_id,
+        clean: config.clean,
+        keepalive: config.keepalive,
+        reconnectPeriod: 5000,
+        rejectUnauthorized: config.reject_unauthorized,
     };
+
+    console.log(config);
 
     if (config.username) {
         options.username = config.username;
@@ -32,14 +39,6 @@ const connect = (config: MQTTConfig) => {
 
     if (config.password) {
         options.password = config.password;
-    }
-
-    if (config.client_id) {
-        options.clientId = config.client_id;
-    }
-
-    if (config.keepalive) {
-        options.keepalive = config.keepalive;
     }
 
     if (config.ca) {
@@ -56,8 +55,6 @@ const connect = (config: MQTTConfig) => {
         options.key = readFileSync(config.key);
         options.protocol = "mqtts";
     }
-
-    options.reconnectPeriod = 5000;
 
     return connectAsync(options);
 };

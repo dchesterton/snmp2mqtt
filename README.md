@@ -12,13 +12,15 @@ mqtt:
   port: 1884                   # Optional: broker port (default: 1883 or 8883 for TLS connections)
   username: my_user            # Optional: broker user (default: none)
   password: my_password        # Optional: broker password (default: none)
-  client_id: snmp2mqtt         # Optional: client ID (default: random)
+  client_id: snmp2mqtt         # Optional: client ID (default: snmp2mqtt)
   keepalive: 30                # Optional: keepalive in seconds (default: 10)
+  clean: true                  # Optional: clean session (default: true)
   retain: true                 # Optional: retain (default: true)
   qos: 2                       # Optional: QoS (default: 0)
   ca: /cert/ca.pem             # Optional: CA for TLS connection (default: none)
   cert: /cert/cert.pem         # Optional: certificate for TLS connection (default: none)
   key: /cert/key.pem           # Optional: private key for TLS connection (default: none)
+  reject_unauthorized: true    # Optional: if not false, the server certificate is verified against the list of supplied CAs. Override with caution (default: true when using TLS)
 
 homeassistant:
   discovery: true              # Optional: enable Home Assistant discovery (default: false)
