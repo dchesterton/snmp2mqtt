@@ -542,10 +542,10 @@ ms@2.1.2:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-net-snmp@^3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/net-snmp/-/net-snmp-3.5.2.tgz#cfd84833eb086fd18ed56a368e1a89dbcd27df19"
-  integrity sha512-8B3LvTnY0WllKDpbkDQHuj7i+1niGBL+21div/mbW6kp3+09gldTjuYlW4HWWtkXuNZ2Q72mN1zzTK8urFKQiw==
+net-snmp@^3.5.8:
+  version "3.5.8"
+  resolved "https://registry.yarnpkg.com/net-snmp/-/net-snmp-3.5.8.tgz#90fd37b2ef28bf30a96fc176540bec0fe2172d5e"
+  integrity sha512-SPMn8jE9QXD9QUMOzEeEEXAYZtRIX3zUyPDewZmRRZ0Qgx9t42H90VQG165tG32/MglU8gCoRWoBsGapyN75Jg==
   dependencies:
     asn1-ber "*"
     smart-buffer "^4.1.0"
@@ -574,10 +574,10 @@ path-is-absolute@^1.0.0:
   resolved "https://registry.yarnpkg.com/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
   integrity sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
 
-prettier@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.2.tgz#ef280a05ec253712e486233db5c6f23441e7342d"
-  integrity sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==
+prettier@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.5.1.tgz#fff75fa9d519c54cf0fce328c1017d94546bc56a"
+  integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==
 
 process-nextick-args@^2.0.1, process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -756,10 +756,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.3.5:
-  version "4.3.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.5.tgz#4d1c37cc16e893973c45a06886b7113234f119f4"
-  integrity sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==
+typescript@^4.5.4:
+  version "4.5.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.4.tgz#a17d3a0263bf5c8723b9c52f43c5084edf13c2e8"
+  integrity sha512-VgYs2A2QIRuGphtzFV7aQJduJ2gyfTljngLzjpfW9FoYZF6xuw1W0vW9ghCKLfcWrCFxK81CSGRAvS1pn4fIUg==
 
 unc-path-regex@^0.1.2:
   version "0.1.2"
