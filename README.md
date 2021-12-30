@@ -41,9 +41,9 @@ targets:
       - oid: 1.3.6.1.2.1.25.1.1.0     # Required: SNMP oid
         name: Raspberry Pi Uptime     # Required: sensor name
         unit_of_measurement: days     # Optional: set the unit of measurement in Home Assistant
-        transform: "value / 6000"     # Optional: a transforma function written in JavaScript
+        transform: "value / 6000"     # Optional: a transform function written in JavaScript
         icon: mdi:calendar-clock      # Optional: set an icon in Home Assistant
-        binary_sensor: false          # Optional: expose the sensor as a binary sensor in Home Assistant
+        binary_sensor: false          # Optional: whether to expose the sensor as a binary sensor in Home Assistant
 
   - host: 192.168.0.3
     name: Raspberry Pi 2
