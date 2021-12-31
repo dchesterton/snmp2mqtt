@@ -15,6 +15,7 @@ RUN mv /app/node_modules /app/node_modules_dev
 RUN yarn install --frozen-lockfile --production
 
 FROM base
+STOPSIGNAL SIGINT
 WORKDIR /app
 
 COPY --from=builder /app/node_modules /app/node_modules
