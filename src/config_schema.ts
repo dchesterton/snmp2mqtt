@@ -19,6 +19,9 @@ export const schema = {
                 device_model: {
                     type: "string",
                 },
+                suggested_area: {
+                    type: "string",
+                },
                 port: {
                     type: "number",
                 },

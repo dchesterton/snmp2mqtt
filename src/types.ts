@@ -22,6 +22,7 @@ export interface TargetConfig {
     name?: string;
     device_manufacturer?: string;
     device_model?: string;
+    suggested_area?: string;
     community?: string;
     version?: VersionConfig;
     port?: number;
