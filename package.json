@@ -14,7 +14,7 @@
         "js-yaml": "^4.1.0",
         "luxon": "^2.3.0",
         "net-snmp": "^3.5.8",
-        "slugify": "^1.6.4"
+        "slugify": "^1.6.5"
     },
     "devDependencies": {
         "@tsconfig/node16": "^1.0.2",
