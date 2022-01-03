@@ -12,7 +12,7 @@
         "better-ajv-errors": "^1.1.2",
         "bigint-buffer": "^1.1.5",
         "js-yaml": "^4.1.0",
-        "luxon": "^2.2.0",
+        "luxon": "^2.3.0",
         "net-snmp": "^3.5.8",
         "slugify": "^1.6.4"
     },
