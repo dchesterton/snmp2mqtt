@@ -124,10 +124,10 @@ asn1-ber@*:
   resolved "https://registry.yarnpkg.com/asn1-ber/-/asn1-ber-1.1.0.tgz#b69f91578c08afa65511124908a7a82f62c6571c"
   integrity sha512-t/pm9zz3CC7jE2ItzMPi4rYUXp4d3JkLAUQY8E/5u5Lkaq7KMvMalRWrW9WWARm5gOB/HE/mkorImJwSL7fi9w==
 
-async-mqtt@^2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/async-mqtt/-/async-mqtt-2.6.1.tgz#7cca37b0c766e00d7b0b33c9eb236e216ed06248"
-  integrity sha512-EkXAwRzwMaPC6ji0EvNeM5OMe6VjMhEKVJJUN7gu/hGzkcDpZtaI34nUwdwCMbjQB3pnuSOHqQMFKsUpg+D8kA==
+async-mqtt@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/async-mqtt/-/async-mqtt-2.6.2.tgz#e4097690f4cb6b5cdbf95209b454acdc90904343"
+  integrity sha512-541G08kFaIZLdNdHEo4lNmUPpOn1Yc9VdcB6pw99VfknPIZFOu2qwjQM1edxkK8KWbJUHcr7x3yf3RAbAFSPJQ==
   dependencies:
     mqtt "^4.1.0"
 
