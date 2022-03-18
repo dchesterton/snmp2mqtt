@@ -65,10 +65,10 @@
   resolved "https://registry.yarnpkg.com/@types/js-yaml/-/js-yaml-4.0.5.tgz#738dd390a6ecc5442f35e7f03fa1431353f7e138"
   integrity sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==
 
-"@types/luxon@^2.0.8":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-2.0.8.tgz#a0fdd7ab0b67e08bf1d301232a7fef79b74ded69"
-  integrity sha512-lGmxL6hMEVqXr8w9bL52RUWXVu90o7vH8WQSutQssr2e+w0TNttXx2Zfw2V2lHHHWfW6OGqB8bXDvtKocv19qQ==
+"@types/luxon@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-2.3.1.tgz#e34763178b46232e4c5f079f1706e18692415519"
+  integrity sha512-nAPUltOT28fal2eDZz8yyzNhBjHw1NEymFBP7Q9iCShqpflWPybxHbD7pw/46jQmT+HXOy1QN5hNTms8MOTlOQ==
 
 "@types/node@^14.14.27":
   version "14.14.27"
