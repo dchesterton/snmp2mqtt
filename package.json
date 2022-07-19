@@ -12,14 +12,14 @@
         "better-ajv-errors": "^1.1.2",
         "bigint-buffer": "^1.1.5",
         "js-yaml": "^4.1.0",
-        "luxon": "^2.3.0",
+        "luxon": "^3.0.1",
         "net-snmp": "^3.5.8",
         "slugify": "^1.6.5"
     },
     "devDependencies": {
         "@tsconfig/node16": "^1.0.2",
         "@types/js-yaml": "^4.0.5",
-        "@types/luxon": "^2.0.8",
+        "@types/luxon": "^3.0.0",
         "@types/node": "^14.14.27",
         "prettier": "^2.5.1",
         "ts-node": "^10.4.0",
