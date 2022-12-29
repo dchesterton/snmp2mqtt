@@ -110,9 +110,9 @@ export const createClient = async (
     return {
         publish,
         sensorStatusTopic: (sensor: SensorConfig, target: TargetConfig) =>
-            `snmp2mqtt/${target.host}/${slugify(sensor.name)}/status`,
+            `${config.base_topic}/${config.target_name_as_topic && target.name ? slugify(target.name) : target.host}/${slugify(sensor.name)}/status`,
         sensorValueTopic: (sensor: SensorConfig, target: TargetConfig) =>
-            `snmp2mqtt/${target.host}/${slugify(sensor.name)}/value`,
+            `${config.base_topic}/${config.target_name_as_topic && target.name ? slugify(target.name) : target.host}/${slugify(sensor.name)}/value`,
         STATUS_TOPIC,
         ONLINE,
         OFFLINE,

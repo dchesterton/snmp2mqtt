@@ -14,6 +14,8 @@ export interface MQTTConfig {
     key?: string;
     clean: boolean;
     reject_unauthorized?: boolean;
+    target_name_as_topic?: boolean;
+    base_topic?: string;
 }
 
 export interface TargetConfig {
