@@ -22,6 +22,7 @@ mqtt:
     key: /cert/key.pem # Optional: private key for TLS connection (default: none)
     reject_unauthorized: true # Optional: if not false, the server certificate is verified against the list of supplied CAs. Override with caution (default: true when using TLS)
     target_name_as_topic: true # Optional: Use the target's name as the MQTT topic instead of the host (default: false)
+    base_topic: # Optional: the base level of the topic (default: snmp2mqtt)
 
 homeassistant:
     discovery: true # Optional: enable Home Assistant discovery (default: false)
