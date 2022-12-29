@@ -46,7 +46,7 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
           tags: |
-            ghcr.io/${{ env.GITHUB_REPOSITORY }}::latest
-            ghcr.io/${{ env.GITHUB_REPOSITORY }}:${{ steps.version.outputs.version }}
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
           labels: "version=${{ steps.version.outputs.version }}"
 
