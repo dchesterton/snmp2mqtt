@@ -8,8 +8,8 @@ import { EventEmitter } from "events";
 const OFFLINE = "offline";
 const ONLINE = "online";
 
-const STATUS_TOPIC = "snmp2mqtt/status";
-const CONFIG_TOPIC = "snmp2mqtt/config";
+const STATUS_TOPIC = "status";
+const CONFIG_TOPIC = "config";
 
 const connect = (config: MQTTConfig) => {
     const port = config.port ? config.port : config.ca ? 8883 : 1883;
@@ -19,7 +19,7 @@ const connect = (config: MQTTConfig) => {
         protocol: "mqtt",
         port,
         will: {
-            topic: STATUS_TOPIC,
+            topic: `${config.base_topic}/${STATUS_TOPIC}`,
             payload: OFFLINE,
             retain: config.retain,
             qos: config.qos,
@@ -31,6 +31,7 @@ const connect = (config: MQTTConfig) => {
         rejectUnauthorized: config.reject_unauthorized,
     };
 
+    console.log(`${config.base_topic}/${STATUS_TOPIC}`);
     console.log(config);
 
     if (config.username) {
@@ -94,8 +95,8 @@ export const createClient = async (
     };
 
     const onConnect = async () => {
-        await publish(STATUS_TOPIC, ONLINE);
-        await publish(CONFIG_TOPIC, { version });
+        await publish(`${config.base_topic}/${STATUS_TOPIC}`, ONLINE);
+        await publish(`${config.base_topic}/${CONFIG_TOPIC}`, { version });
         emitter.emit("connect");
     };
 
@@ -110,10 +111,10 @@ export const createClient = async (
     return {
         publish,
         sensorStatusTopic: (sensor: SensorConfig, target: TargetConfig) =>
-            `snmp2mqtt/${target.host}/${slugify(sensor.name)}/status`,
+            `${config.base_topic}/${config.target_name_as_topic && target.name ? slugify(target.name) : target.host}/${slugify(sensor.name)}/status`,
         sensorValueTopic: (sensor: SensorConfig, target: TargetConfig) =>
-            `snmp2mqtt/${target.host}/${slugify(sensor.name)}/value`,
-        STATUS_TOPIC,
+            `${config.base_topic}/${config.target_name_as_topic && target.name ? slugify(target.name) : target.host}/${slugify(sensor.name)}/value`,
+        STATUS_TOPIC: '`${config.base_topic}/${STATUS_TOPIC}`,
         ONLINE,
         OFFLINE,
         on: (event: "close" | "connect", cb: () => void) =>
@@ -121,7 +122,7 @@ export const createClient = async (
         off: (event: "close" | "connect", cb: () => void) =>
             emitter.off(event, cb),
         end: async () => {
-            await client.publish(STATUS_TOPIC, OFFLINE);
+            await client.publish(`${config.base_topic}/${STATUS_TOPIC}`, OFFLINE);
             await client.end();
         },
         qos: config.qos,

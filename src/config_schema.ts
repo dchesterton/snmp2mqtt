@@ -148,6 +148,14 @@ export const schema = {
                     type: "boolean",
                     default: true,
                 },
+                target_name_as_topic: {
+                    type: "boolean",
+                    default: false,
+                },
+                base_topic: {
+                    type: "string",
+                    default: "snmp2mqtt",
+                },
             },
             additionalProperties: false,
         },
