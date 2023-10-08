@@ -4,3 +4,6 @@ dist
 node_modules
 config.yml
 yarn-error.log
+
+# JetBrains Cruft
+/.idea/
